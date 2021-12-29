@@ -1,0 +1,19 @@
+service: api-backend
+
+provider:
+  name: aws
+  ecr:
+    images:
+      api_image:
+        path: ./
+
+functions:
+  api_container:
+    image:
+      name: api_image
+      command:
+        - api.main.handler
+      entryPoint:
+        - "/lambda-entrypoint.sh"
+    events:
+      - http: ANY /
