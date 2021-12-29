@@ -53,8 +53,8 @@ def main():
     else:
         user = os.getenv("POSTGRES_USER", "postgres")
         password = os.getenv("POSTGRES_PASS", "postgres")
-        server = os.getenv("POSTGRES_SERVER", f"{project_name}_db")
-        port = os.getenv("POSTGRES_PORT", "5000")
+        server = os.getenv("POSTGRES_SERVER", "db")
+        port = os.getenv("POSTGRES_PORT", "5432")
         db = os.getenv("POSTGRES_DB", project_name)
 
         db_url = f"postgresql://{user}:{password}@{server}:{port}/{db}"
