@@ -4,5 +4,8 @@
 # environment
 .env
 
+# deployment
+serverless.yml
+
 # IDE
 .vscode/
