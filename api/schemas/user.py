@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from api.schemas import optional
+
 
 class UserBase(BaseModel):
     username: str
@@ -14,3 +16,8 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+@optional
+class UserUpdate(UserBase):
+    pass
