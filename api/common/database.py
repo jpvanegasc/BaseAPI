@@ -1,8 +1,10 @@
+import uuid
 import logging
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.dialects.postgresql import UUID
 
 from api.common import settings
 
@@ -21,3 +23,39 @@ def db_session() -> Session:
         logger.critical("DB is down", exc_info=True)
     finally:
         db.close()
+
+
+class PkModel(object):
+    """
+    Base model with UUID4 primary key
+    """
+
+    id = Column(
+        UUID(as_uuid=False), primary_key=True, default=lambda: str(uuid.uuid4())
+    )
+
+
+class CRUDMixin(object):
+    """
+    Helper class with CRUD utilities
+    """
+
+    @classmethod
+    def create(cls, db: Session, commit=True, **kwargs):
+        instance = cls(**kwargs)
+        return instance.save(db, commit=commit)
+
+    def save(self, db: Session, commit=True):
+        db.add(self)
+
+        if commit:
+            db.commit()
+        else:
+            db.flush()
+            db.refresh(self)
+
+        return self
+
+    @classmethod
+    def get_by_id(cls, db: Session, id):
+        return db.query(cls).filter(cls.id == id).first()
