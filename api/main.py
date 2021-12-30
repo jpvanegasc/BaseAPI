@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 
 from api.common import db_session, MessageException
 from api.common.settings import LogConfig
+from api.routers.user import router as user_router
 
 dictConfig(LogConfig().dict())
 
@@ -17,6 +18,9 @@ logger = logging.getLogger("logger")
 @app.exception_handler(MessageException)
 async def message_exception_handler(request: Request, exc: MessageException):
     return JSONResponse(status_code=exc.status_code, content=exc.to_dict())
+
+
+app.include_router(user_router)
 
 
 @app.get("/")

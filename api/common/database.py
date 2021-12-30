@@ -59,3 +59,14 @@ class CRUDMixin(object):
     @classmethod
     def get_by_id(cls, db: Session, id):
         return db.query(cls).filter(cls.id == id).first()
+
+    def update(self, db: Session, commit=True, **kwargs):
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
+
+        return commit and self.save(db) or self
+
+    def delete(self, db: Session, commit=True):
+        """Hard delete from DB"""
+        db.delete(self)
+        return commit and db.commit()
