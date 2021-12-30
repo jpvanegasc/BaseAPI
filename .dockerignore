@@ -1,0 +1,4 @@
+*.template.*
+.env.*
+startproject.py
+**/local/*
