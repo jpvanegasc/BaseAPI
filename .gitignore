@@ -6,6 +6,7 @@
 
 # deployment
 serverless.yml
+.serverless/
 
 # IDE
 .vscode/
