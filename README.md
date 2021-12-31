@@ -1,6 +1,18 @@
 # API template
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+## Project structure
+
+The API can be divided on 3 main components: models & schemas, controllers and routers & utils, based on the functionalities each component has.
+
+* Models and schemas are meant to be used for DB and data related management. Their main purpose is to define the database structure (models) and provide a tool for validating data through the API. They must not handle business logic.
+
+* Controllers contain the core of the business logic. They are in charge of fetching data from the DB, processing it, and serve it in a way that is useful for the end user. Because a controller might be serving multiple endpoints, each with a particular need, try to keep the response unformatted and, if possible, do not raise exceptions within them. Managing these can become an unreadable mess, and this kind of logic is better suited for utils.
+
+* Routers manage everything related with receiving requests and returning responses to the user, using the data that is being served by the controller. Any extra processing that goes beyond serializing or raising simple exceptions must be handled by an util. This way we ensure that the endpoints are foolproof: endpoints will only fail if the issue is a poorly constructed HTTP connection; any non-HTTP issue encountered can be traced to a faulty controller or util.
+
+It is worth mentioning that the core itself of the API resides in the common folder. Any internal configuration that is not related to the project in particular but with the API as a whole should be stored in here.
+
 ## Running locally
 
 If you wish to run the api locally you need to set up the `.env` file in the root of your project, build the docker image from `local/Dockerfile` and start the docker container with `local/docker-compose.yml`. **Please note** that the docker files from the root of the project are not for local deployment.
