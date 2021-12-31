@@ -67,7 +67,7 @@ def main():
     os.system("cat .env.local >> .env")
 
     os.system(f"docker build -f local/Dockerfile -t {project_name}_backend .")
-    os.system("docker-compose -f local/docker-compose.yml up -d")
+    os.system("docker-compose -f docker-compose-local.yml up -d")
 
     create_serverles_yml(project_name)
 
