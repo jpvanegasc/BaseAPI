@@ -32,11 +32,18 @@ def get_all_users(db=Depends(db_session)):
 @router.get("/{user_id}")
 def get_user_by_id(user_id, db=Depends(db_session)):
     user = user_controllers.get_user_by_id(db, user_id)
+
+    if not user:
+        raise MessageException("user not found", status_code=404)
+
     return object_response(user_schemas.User.from_orm(user).dict())
 
 
 @router.patch("/{user_id}")
 def edit_user(user_id, update_data: user_schemas.UserUpdate, db=Depends(db_session)):
+    if not user_controllers.get_user_by_id(db, user_id):
+        raise MessageException("user not found", status_code=404)
+
     updated_user = user_controllers.edit_user(db, user_id, update_data.dict())
     return object_response(
         user_schemas.User.from_orm(updated_user).dict(exclude_none=True)
@@ -45,5 +52,8 @@ def edit_user(user_id, update_data: user_schemas.UserUpdate, db=Depends(db_sessi
 
 @router.delete("/{user_id}")
 def delete_user(user_id, db=Depends(db_session)):
+    if not user_controllers.get_user_by_id(db, user_id):
+        raise MessageException("user not found", status_code=404)
+
     user_controllers.delete_user(db, user_id)
     return message_response("Deleted user")
