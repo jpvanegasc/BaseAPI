@@ -15,7 +15,7 @@ def test_create_user_successful(client):
     """
     from api.schemas.user import UserBase
 
-    data = json.load(open("tests/mock/users/user.json"))
+    data = json.load(open("tests/mock/user.json"))
     response = client.post("api/users", json=data)
 
     assert response.status_code == 201
@@ -33,7 +33,7 @@ def test_create_user_failed_duplicate(client):
         - Get an HTTP error with status code 400
         - Get an HTTP error with message "user already exists"
     """
-    data = json.load(open("tests/mock/users/user.json"))
+    data = json.load(open("tests/mock/user.json"))
 
     _ = client.post("api/users", json=data)
     response = client.post("api/users", json=data)
@@ -55,7 +55,7 @@ def test_get_all_users(client):
     """
     from api.schemas.user import UserBase
 
-    data = json.load(open("tests/mock/users/user.json"))
+    data = json.load(open("tests/mock/user.json"))
 
     _ = client.post("api/users", json=data)
     response = client.get("api/users")
@@ -77,7 +77,7 @@ def test_get_user_by_id_successful(client):
     """
     from api.schemas.user import UserBase
 
-    data = json.load(open("tests/mock/users/user.json"))
+    data = json.load(open("tests/mock/user.json"))
 
     user = client.post("api/users", json=data)
     response = client.get(f"api/users/{user.json()['data']['id']}")
@@ -117,7 +117,7 @@ def test_update_user_successful(client):
     """
     from api.schemas.user import UserBase
 
-    data = json.load(open("tests/mock/users/user.json"))
+    data = json.load(open("tests/mock/user.json"))
 
     user = client.post("api/users", json=data)
 
@@ -161,7 +161,7 @@ def test_delete_user_successful(client):
         - Response has status code 200
         - User is deleted from db
     """
-    data = json.load(open("tests/mock/users/user.json"))
+    data = json.load(open("tests/mock/user.json"))
 
     user = client.post("api/users", json=data)
     user_id = user.json()["data"]["id"]
