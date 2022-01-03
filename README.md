@@ -19,7 +19,13 @@ If you wish to run the api locally you need to set up the `.env` file in the roo
 
 However, `startproject.py` conveniently does most of the work for you, using values from `.env.local`. To start your project simply run `python3 startproject.py your_project_name`. If you wish to use different values for your local environment, `.env.template` has all the necessary values that you need to set up.
 
-After the docker container is running, enter the container command line via `docker exec -it your_project_name_backend /bin/bash` and start the local server with `uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload`.
+After the docker container is running, well need to initialize the database and then run the local development server. To do so, you will need to:
+
+__To initialize the DB:__
+Initialize the database by running `docker exec your_project_name_backend alembic upgrade head`
+
+__To run the development server:__
+Enter the backend container via `docker exec -it your_project_name_backend /bin/bash` and start the local server with `uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload`.
 
 ## Deploying
 
