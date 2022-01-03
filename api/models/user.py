@@ -1,9 +1,7 @@
-from passlib.context import CryptContext
-from sqlalchemy import Column, String, LargeBinary
+from sqlalchemy import Column, String
 
 from api.common.database import Base, PkModel, CRUDMixin
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from api.common.utils import get_password_hash
 
 
 class User(Base, PkModel, CRUDMixin):
@@ -14,11 +12,5 @@ class User(Base, PkModel, CRUDMixin):
 
     def __init__(self, *args, **kwargs) -> None:
         if kwargs.get("password"):
-            kwargs["password"] = self.get_password(kwargs["password"])
+            kwargs["password"] = get_password_hash(kwargs["password"])
         super().__init__(*args, **kwargs)
-
-    def get_password(self, plain_password):
-        return pwd_context.hash(plain_password)
-
-    def check_password(self, plain_password):
-        return pwd_context.verify(plain_password, self.password)
