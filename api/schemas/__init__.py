@@ -13,6 +13,15 @@ def optional(*fields):
     def wrapper(_cls):
         for field in fields:
             _cls.__fields__[field].required = False
+
+        dict_origin = _cls.dict
+
+        def dict_excludes(*args, exclude_unset: bool = None, **kwargs):
+            exclude_unset = True
+            return dict_origin(*args, **kwargs, exclude_unset=exclude_unset)
+
+        _cls.dict = dict_excludes
+
         return _cls
 
     if fields and inspect.isclass(fields[0]) and issubclass(fields[0], BaseModel):
