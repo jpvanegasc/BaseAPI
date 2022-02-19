@@ -15,7 +15,7 @@ It is worth mentioning that the core itself of the API resides in the common fol
 
 ## Running locally
 
-If you wish to run the api locally you need to set up the `.env` file in the root of your project, build the docker image from `local/Dockerfile` and start the docker container with `docker-compose-local.yml`. **Please note** that the dockerfile from the root of the project is not for local deployment.
+If you wish to run the api locally you need to set up the `.env` file in the root of your project, build the docker image from `local/Dockerfile` and start the docker container with `docker-compose.yml`. **Please note** that the dockerfile from the root of the project is not for local deployment.
 
 However, `startproject.py` conveniently does most of the work for you, using values from `.env.local`. To start your project simply run `python3 startproject.py your_project_name`. If you wish to use different values for your local environment, `.env.template` has all the necessary values that you need to set up.
 
