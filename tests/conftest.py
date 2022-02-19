@@ -15,6 +15,28 @@ engine = create_engine(os.environ.get("TEST_DATABASE_URL"))
 SessionTesting = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
+def assert_code(response, code):
+    """Helper for simplifying response code assertion"""
+    assert response.status_code == code
+
+
+def assert_data(schema, response, data, use_list=False):
+    """Helper for simplifying response data assertion"""
+    if use_list:
+        assert schema(**response.json()["data"][0]).dict() == schema(**data).dict()
+    else:
+        assert schema(**response.json()["data"]).dict() == schema(**data).dict()
+
+
+def assert_message(response, message):
+    assert response.json()["message"] == message
+
+
+def mock_load(mock_file):
+    """Helper for simplifying mock loading"""
+    return json.load(open(f"tests/mock/{mock_file}.json"))
+
+
 @pytest.fixture
 def mock_app():
     Base.metadata.create_all(engine)
