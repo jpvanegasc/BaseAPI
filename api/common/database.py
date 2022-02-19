@@ -1,7 +1,7 @@
 import uuid
 import logging
 
-from sqlalchemy import create_engine, Column
+from sqlalchemy import create_engine, Column, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.dialects.postgresql import UUID
@@ -70,3 +70,10 @@ class CRUDMixin(object):
         """Hard delete from DB"""
         db.delete(self)
         return commit and db.commit()
+
+
+def foreign_key_column(column_name, on_delete="CASCADE", **kwargs):
+    """Helper for mounting a foreign key column"""
+    return Column(
+        UUID(as_uuid=False), ForeignKey(column_name, ondelete=on_delete), **kwargs
+    )
