@@ -11,7 +11,7 @@ class UserCreate(UserBase):
     password: str
 
 
-class User(UserBase):
+class UserRead(UserBase):
     id: str
 
     class Config:
