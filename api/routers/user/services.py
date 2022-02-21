@@ -18,7 +18,9 @@ def create_user(new_user: user_schemas.UserCreate, db=Depends(db_session)):
         raise MessageException("user already exists")
 
     new_user = user_controllers.create_user(db, new_user.dict())
-    return object_response(user_schemas.UserRead.from_orm(new_user).dict(), status_code=201)
+    return object_response(
+        user_schemas.UserRead.from_orm(new_user).dict(), status_code=201
+    )
 
 
 @router.get("")
