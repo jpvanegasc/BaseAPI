@@ -71,27 +71,9 @@ def client(mock_app, mock_db_session):
 
 
 @pytest.fixture
-def mock_user():
-    from api.models.user import User
+def mock_create_user(client):
+    """Simplify user creation. Returns the user id"""
+    user = json.load(open("tests/mock/user.json"))
+    response = client.post("api/users", json=user)
 
-    data = json.load(open("tests/mock/users/user.json"))
-    mocked_user = User(**data)
-
-    # Un-hash password for validation
-    mocked_user.password = data["password"]
-
-    return mocked_user
-
-
-@pytest.fixture
-def mock_users(mock_user):
-    del mock_user._sa_instance_state
-
-    return [mock_user]
-
-
-@pytest.fixture
-def mock_get_all_users(mock_db_session, mock_users):
-    mock_db_session.query.all.return_value = [vars(user) for user in mock_users]
-
-    return mock_db_session
+    return response.json()["data"]

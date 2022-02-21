@@ -37,7 +37,7 @@ def test_create_user_failed_duplicate(client):
     assert_message(response, "user already exists")
 
 
-def test_get_all_users(client):
+def test_get_all_users(client, mock_create_user):
     """
     Test for getting all users
 
@@ -48,15 +48,13 @@ def test_get_all_users(client):
     from api.schemas.user import UserBase
 
     data = mock_load("user")
-
-    _ = client.post("api/users", json=data)
     response = client.get("api/users")
 
     assert_code(response, 200)
     assert_data(UserBase, response, data, use_list=True)
 
 
-def test_get_user_by_id_successful(client):
+def test_get_user_by_id_successful(client, mock_create_user):
     """
     Test for getting an user by its id
 
@@ -68,8 +66,8 @@ def test_get_user_by_id_successful(client):
 
     data = mock_load("user")
 
-    user = client.post("api/users", json=data)
-    response = client.get(f"api/users/{user.json()['data']['id']}")
+    user_id = mock_create_user["id"]
+    response = client.get(f"api/users/{user_id}")
 
     assert_code(response, 200)
     assert_data(UserBase, response, data)
@@ -90,7 +88,7 @@ def test_get_user_by_id_failed(client):
     assert_message(response, "user not found")
 
 
-def test_update_user_successful(client):
+def test_update_user_successful(client, mock_create_user):
     """
     Test for updating an user
 
@@ -102,14 +100,12 @@ def test_update_user_successful(client):
 
     data = mock_load("user")
 
-    user = client.post("api/users", json=data)
+    user_id = mock_create_user["id"]
 
     new_username = "new_username"
     data["username"] = new_username
 
-    response = client.patch(
-        f"api/users/{user.json()['data']['id']}", json={"username": new_username}
-    )
+    response = client.patch(f"api/users/{user_id}", json={"username": new_username})
 
     assert_code(response, 200)
     assert_data(UserBase, response, data)
@@ -130,7 +126,7 @@ def test_update_user_failed(client):
     assert_message(response, "user not found")
 
 
-def test_delete_user_successful(client):
+def test_delete_user_successful(client, mock_create_user):
     """
     Test for deleting an user
 
@@ -140,8 +136,7 @@ def test_delete_user_successful(client):
     """
     data = mock_load("user")
 
-    user = client.post("api/users", json=data)
-    user_id = user.json()["data"]["id"]
+    user_id = mock_create_user["id"]
     response = client.delete(f"api/users/{user_id}")
     get_response = client.get(f"api/users/{user_id}")
 
