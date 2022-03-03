@@ -18,17 +18,13 @@ def create_user(new_user: user_schemas.UserCreate, db=Depends(db_session)):
         raise MessageException("user already exists")
 
     new_user = user_controllers.create_user(db, new_user.dict())
-    return object_response(
-        user_schemas.UserRead.from_orm(new_user).dict(), status_code=201
-    )
+    return object_response(new_user, status_code=201, schema=user_schemas.UserRead)
 
 
 @router.get("")
 def get_all_users(db=Depends(db_session)):
     all_users = user_controllers.get_all_users(db)
-    return object_response(
-        [user_schemas.UserRead.from_orm(user).dict() for user in all_users]
-    )
+    return object_response(all_users, schema=user_schemas.UserRead)
 
 
 @router.get("/{user_id}")
@@ -38,7 +34,7 @@ def get_user_by_id(user_id, db=Depends(db_session)):
     if not user:
         raise MessageException("user not found", status_code=404)
 
-    return object_response(user_schemas.UserRead.from_orm(user).dict())
+    return object_response(user, schema=user_schemas.UserRead)
 
 
 @router.patch("/{user_id}")
@@ -48,7 +44,7 @@ def edit_user(user_id, update_data: user_schemas.UserUpdate, db=Depends(db_sessi
 
     updated_user = user_controllers.edit_user(db, user_id, update_data.dict())
     return object_response(
-        user_schemas.UserRead.from_orm(updated_user).dict(exclude_none=True)
+        updated_user, schema=user_schemas.UserRead, exclude_none=True
     )
 
 
