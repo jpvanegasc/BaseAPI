@@ -2,6 +2,7 @@ from typing import Any
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 
 BASE_RESPONSE = {"data": None, "message": ""}
 
@@ -13,7 +14,7 @@ def object_response(
     status_code: int = 200,
     message: str = "Success",
     schema: BaseModel = None,
-    exclude_none:bool=False
+    exclude_none: bool = False,
 ):
     response = BASE_RESPONSE.copy()
 
@@ -25,6 +26,8 @@ def object_response(
 
     response["data"] = item
     response["message"] = message
+
+    response = jsonable_encoder(response)
 
     return JSONResponse(response, status_code=status_code)
 
