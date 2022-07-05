@@ -1,8 +1,18 @@
 from sqlalchemy.orm import Session
 
 
+class UndefinedModelError(Exception):
+    pass
+
+
 class BaseCRUD(object):
     model = None
+
+    def __init__(self):
+        if self.model is None:
+            raise UndefinedModelError(
+                f"model for class '{type(self).__name__}' not set"
+            )
 
     def create(self, db: Session, data: dict):
         return self.model.create(db, **data)
