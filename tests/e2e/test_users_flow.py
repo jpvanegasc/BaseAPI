@@ -1,12 +1,13 @@
 from tests.utils import mock_load, assert_code, assert_data, assert_message
 
+
 def test_successful_user_flow(client):
     """
     Test for user's CRUD
     """
     from api.schemas.user import UserBase
 
-    data= mock_load("user")
+    data = mock_load("user")
 
     # Create
     response = client.post("api/users", json=data)
