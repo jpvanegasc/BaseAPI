@@ -12,7 +12,7 @@ router = APIRouter(prefix="/api/users", tags=["Users"])
 
 @router.post("")
 def create_user(new_user: user_schemas.UserCreate, db=Depends(db_session)):
-    existing = user_controllers.get_user_by_username(db, new_user.username)
+    existing = user_controllers.get_by_username(db, new_user.username)
 
     if existing:
         raise MessageException("user already exists")
@@ -28,7 +28,7 @@ def get_all_users(db=Depends(db_session)):
 
 
 @router.get("/{user_id}")
-def get_user_by_id(user_id, db=Depends(db_session)):
+def get_by_id(user_id, db=Depends(db_session)):
     user = user_controllers.get_by_id(db, user_id)
 
     if not user:
