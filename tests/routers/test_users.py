@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from tests.conftest import mock_load, assert_code, assert_data, assert_message
+from tests.utils import mock_load, assert_code, assert_data, assert_message
 
 
 def test_create_user_successful(client):
@@ -51,7 +51,7 @@ def test_get_all_users(client, mock_create_user):
     response = client.get("api/users")
 
     assert_code(response, 200)
-    assert_data(UserBase, response, data, use_list=True)
+    assert_data(UserBase, response, data)
 
 
 def test_get_user_by_id_successful(client, mock_create_user):
