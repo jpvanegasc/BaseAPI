@@ -1,3 +1,3 @@
-from .user import UserCRUD
+import api.controllers.user as u
 
-user_controllers = UserCRUD()
+user = u.UserCRUD()
