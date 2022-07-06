@@ -1,0 +1,4 @@
+[flake8]
+# Match black's line lenght
+max-line-length = 88
+exclude = migrations/*
