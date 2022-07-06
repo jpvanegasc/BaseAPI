@@ -2,13 +2,11 @@ import os
 import json
 
 import pytest
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from api.main import start_app
-import api.common.settings as settings
 from api.common.database import db_session, Base
 
 engine = create_engine(os.environ.get("TEST_DATABASE_URL"))

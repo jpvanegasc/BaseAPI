@@ -134,8 +134,6 @@ def test_delete_user_successful(client, mock_create_user):
         - Response has status code 200
         - User is deleted from db
     """
-    data = mock_load("user")
-
     user_id = mock_create_user["id"]
     response = client.delete(f"api/users/{user_id}")
     get_response = client.get(f"api/users/{user_id}")

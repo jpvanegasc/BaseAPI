@@ -1,4 +1,4 @@
-from tests.utils import mock_load, assert_code, assert_data, assert_message
+from tests.utils import mock_load, assert_code, assert_data
 
 
 def test_successful_user_flow(client):

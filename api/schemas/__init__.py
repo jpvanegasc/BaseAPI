@@ -5,9 +5,10 @@ from pydantic import BaseModel
 def optional(*fields):
     """
     Decorator function used to modify a pydantic model's fields to all be optional.
-    Alternatively, you can  also pass the field names that should be made optional as arguments
-    to the decorator.
-    Taken from https://github.com/samuelcolvin/pydantic/issues/1223#issuecomment-775363074
+    Alternatively, you can  also pass the field names that should be made optional
+    as arguments to the decorator.
+    Taken from
+        https://github.com/samuelcolvin/pydantic/issues/1223#issuecomment-775363074
     """
 
     def wrapper(_cls):
