@@ -10,3 +10,6 @@ serverless.yml
 
 # IDE
 .vscode/
+
+# Tests
+.coverage
