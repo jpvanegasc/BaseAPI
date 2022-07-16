@@ -26,6 +26,6 @@ class BaseCRUD(object):
     def update(self, db: Session, id: str, update_data: dict):
         return self.model.get_by_id(db, id).update(db, **update_data)
 
-    def delete(self, db: Session, user_id: str):
+    def delete(self, db: Session, id: str):
         """Hard delete from DB"""
-        return self.model.get_by_id(db, user_id).delete(db)
+        return self.model.get_by_id(db, id).delete(db)
