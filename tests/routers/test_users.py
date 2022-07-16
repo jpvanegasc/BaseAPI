@@ -1,157 +1,159 @@
+import pytest
 from uuid import uuid4
+from copy import deepcopy
 
-from tests.utils import mock_load, assert_code, assert_data, assert_message
-
-
-def test_create_user_successful(client):
-    """
-    Test for creating an user
-
-    AC:
-        - Response has status code 201
-        - Created user must be equal to expected value
-    """
-    from api.schemas.user import UserBase
-
-    data = mock_load("user")
-    response = client.post("api/users", json=data)
-
-    assert_code(response, 201)
-    assert_data(UserBase, response, data)
+from tests.routers.base import RouteTest
+from tests.utils import assert_code, assert_data, assert_message
+from api.models.user import User
+from api.controllers import user as user_crud
+from api.schemas.user import UserBase, UserCreate
 
 
-def test_create_user_failed_duplicate(client):
-    """
-    Test for creating a duplicate user
+class TestUserRouters(RouteTest):
+    model = User
+    model_id = str(uuid4())
+    crud = user_crud
+    create_schema = UserCreate
 
-    AC:
-        - Get an HTTP error with status code 400
-        - Get an HTTP error with message "user already exists"
-    """
-    data = mock_load("user")
+    data = "user"
 
-    _ = client.post("api/users", json=data)
-    response = client.post("api/users", json=data)
+    @pytest.fixture
+    def mock_get_by_username(self, monkeypatch):
+        def mock_crud_get_by_username(session, username):
+            if username == self.instance.username:
+                return self.instance
+            else:
+                return None
 
-    assert_code(response, 400)
-    assert_message(response, "user already exists")
+        monkeypatch.setattr(self.crud, "get_by_username", mock_crud_get_by_username)
 
+    @pytest.fixture
+    def mock_create_user(self, monkeypatch, mock_create, mock_get_by_username):
+        return mock_create
 
-def test_get_all_users(client, mock_create_user):
-    """
-    Test for getting all users
+    def test_create_user_successful(self, client, mock_create):
+        """
+        Test for creating an user
+        Uses mock_create because `get_by_username` has to return None
 
-    AC:
-        - Response has status code 200
-        - Users must be the same as expected value
-    """
-    from api.schemas.user import UserBase
+        AC:
+            - Response has status code 201
+            - Created user must be equal to expected value
+        """
+        response = client.post("api/users", json=self.data)
 
-    data = mock_load("user")
-    response = client.get("api/users")
+        assert_code(response, 201)
+        assert_data(UserBase, response, self.data)
 
-    assert_code(response, 200)
-    assert_data(UserBase, response, data)
+    def test_create_user_failed_duplicate(self, client, mock_create_user):
+        """
+        Test for creating a duplicate user
 
+        AC:
+            - Get an HTTP error with status code 400
+            - Get an HTTP error with message "user already exists"
+        """
+        response = client.post("api/users", json=self.data)
 
-def test_get_user_by_id_successful(client, mock_create_user):
-    """
-    Test for getting an user by its id
+        assert_code(response, 400)
+        assert_message(response, "user already exists")
 
-    AC:
-        - Response has status code 200
-        - User must be the same as the expected value
-    """
-    from api.schemas.user import UserBase
+    def test_get_all_users(self, client, mock_all):
+        """
+        Test for getting all users
 
-    data = mock_load("user")
+        AC:
+            - Response has status code 200
+            - Users must be the same as expected value
+        """
+        response = client.get("api/users")
 
-    user_id = mock_create_user["id"]
-    response = client.get(f"api/users/{user_id}")
+        assert_code(response, 200)
+        assert_data(UserBase, response, self.data)
 
-    assert_code(response, 200)
-    assert_data(UserBase, response, data)
+    def test_get_user_by_id_successful(self, client, mock_get_by_id):
+        """
+        Test for getting an user by its id
 
+        AC:
+            - Response has status code 200
+            - User must be the same as the expected value
+        """
+        response = client.get(f"api/users/{self.model_id}")
 
-def test_get_user_by_id_failed(client):
-    """
-    Test for querying a user that doesn't exist
+        assert_code(response, 200)
+        assert_data(UserBase, response, self.data)
 
-    AC:
-        - Get an HTTP error with status code 404
-        - Get an HTTP error with message "user not found"
-    """
-    user_id = uuid4()
-    response = client.get(f"api/users/{user_id}")
+    def test_get_user_by_id_failed(self, client, mock_get_by_id):
+        """
+        Test for querying a user that doesn't exist
 
-    assert_code(response, 404)
-    assert_message(response, "user not found")
+        AC:
+            - Get an HTTP error with status code 404
+            - Get an HTTP error with message "user not found"
+        """
+        user_id = uuid4()
+        response = client.get(f"api/users/{user_id}")
 
+        assert_code(response, 404)
+        assert_message(response, "user not found")
 
-def test_update_user_successful(client, mock_create_user):
-    """
-    Test for updating an user
+    def test_update_user_successful(self, client, mock_update):
+        """
+        Test for updating an user
 
-    AC:
-        - Response has status code 201
-        - Updated user must be equal to expected value
-    """
-    from api.schemas.user import UserBase
+        AC:
+            - Response has status code 201
+            - Updated user must be equal to expected value
+        """
+        data = deepcopy(self.data)
 
-    data = mock_load("user")
+        new_username = "new_username"
+        data["username"] = new_username
 
-    user_id = mock_create_user["id"]
+        response = client.patch(
+            f"api/users/{self.model_id}", json={"username": new_username}
+        )
 
-    new_username = "new_username"
-    data["username"] = new_username
+        assert_code(response, 200)
+        assert_data(UserBase, response, data)
 
-    response = client.patch(f"api/users/{user_id}", json={"username": new_username})
+    def test_update_user_failed(self, client, mock_update):
+        """
+        Test for updating an user that doesn't exist
 
-    assert_code(response, 200)
-    assert_data(UserBase, response, data)
+        AC:
+            - Get an HTTP error with status code 404
+            - Get an HTTP error with message "user not found"
+        """
+        user_id = uuid4()
+        response = client.patch(f"api/users/{user_id}", json={"username": ""})
 
+        assert_code(response, 404)
+        assert_message(response, "user not found")
 
-def test_update_user_failed(client):
-    """
-    Test for updating an user that doesn't exist
+    def test_delete_user_successful(self, client, mock_delete):
+        """
+        Test for deleting an user
 
-    AC:
-        - Get an HTTP error with status code 404
-        - Get an HTTP error with message "user not found"
-    """
-    user_id = uuid4()
-    response = client.patch(f"api/users/{user_id}", json={"username": ""})
+        AC:
+            - Response has status code 200
+            - User is deleted from db
+        """
+        response = client.delete(f"api/users/{self.model_id}")
 
-    assert_code(response, 404)
-    assert_message(response, "user not found")
+        assert_code(response, 200)
 
+    def test_delete_user_failed(self, client, mock_delete):
+        """
+        Test for deleting an user that doesn't exist
 
-def test_delete_user_successful(client, mock_create_user):
-    """
-    Test for deleting an user
+        AC:
+            - Get an HTTP error with status code 404
+            - Get an HTTP error with message "user not found"
+        """
+        user_id = uuid4()
+        response = client.delete(f"api/users/{user_id}")
 
-    AC:
-        - Response has status code 200
-        - User is deleted from db
-    """
-    user_id = mock_create_user["id"]
-    response = client.delete(f"api/users/{user_id}")
-    get_response = client.get(f"api/users/{user_id}")
-
-    assert_code(response, 200)
-    assert_code(get_response, 404)
-
-
-def test_delete_user_failed(client):
-    """
-    Test for deleting an user that doesn't exist
-
-    AC:
-        - Get an HTTP error with status code 404
-        - Get an HTTP error with message "user not found"
-    """
-    user_id = uuid4()
-    response = client.delete(f"api/users/{user_id}")
-
-    assert_code(response, 404)
-    assert_message(response, "user not found")
+        assert_code(response, 404)
+        assert_message(response, "user not found")
