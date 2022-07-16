@@ -44,12 +44,3 @@ def client(mock_app, mock_db_session):
 
     with TestClient(mock_app) as client:
         yield client
-
-
-@pytest.fixture
-def mock_create_user(client):
-    """Simplify user creation. Returns the user id"""
-    user = json.load(open("tests/mock/user.json"))
-    response = client.post("api/users", json=user)
-
-    return response.json()["data"]
