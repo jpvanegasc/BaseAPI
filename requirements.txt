@@ -17,7 +17,6 @@ importlib-metadata==4.10.0
 importlib-resources==5.4.0
 iniconfig==1.1.1
 Mako==1.1.6
-mangum==0.12.3
 MarkupSafe==2.0.1
 marshmallow==3.14.1
 mccabe==0.6.1

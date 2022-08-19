@@ -5,38 +5,6 @@ import os
 import sys
 from dotenv import load_dotenv
 
-SERVERLESS = """service: $PROJECT_NAME-backend
-
-provider:
-  name: aws
-  ecr:
-    images:
-      $PROJECT_NAME_backend:
-        path: ./
-
-functions:
-  api_container:
-    image:
-      name: $PROJECT_NAME_backend
-      command:
-        - api.main.handler
-      entryPoint:
-        - "/lambda-entrypoint.sh"
-    events:
-      - http: ANY /
-"""
-
-
-def create_serverles_yml(project_name):
-    global SERVERLESS
-
-    try:
-        with open("serverless.yml") as _:
-            return
-    except FileNotFoundError:
-        with open("serverless.yml", "w+") as f:
-            f.write(SERVERLESS.replace("$PROJECT_NAME", project_name))
-
 
 def main():
     try:
@@ -68,8 +36,6 @@ def main():
 
     os.system(f"docker build -f local/Dockerfile -t {project_name}_backend .")
     os.system("docker-compose up -d")
-
-    create_serverles_yml(project_name)
 
 
 if __name__ == "__main__":

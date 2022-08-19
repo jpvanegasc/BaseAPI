@@ -1,7 +1,6 @@
 import logging
 from logging.config import dictConfig
 
-from mangum import Mangum
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
@@ -30,4 +29,3 @@ def start_app():
 
 
 app = start_app()
-handler = Mangum(app)

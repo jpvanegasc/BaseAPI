@@ -9,3 +9,6 @@ WORKDIR /app
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt
+
+# stay idle, we're running locally
+CMD [ "tail", "-f", "/dev/null" ]
