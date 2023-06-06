@@ -7,7 +7,7 @@ def test_successful_user_flow(client):
     """
     Test for user's CRUD
     """
-    from api.schemas.user import UserBase
+    from src.schemas.user import UserBase
 
     data = mock_load("user")
 

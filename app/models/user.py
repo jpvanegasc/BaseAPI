@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String
 
-from api.common.database import Base, PkModel, CRUDMixin
-from api.common.utils import get_password_hash
+from src.common.database import Base, PkModel, CRUDMixin
+from src.common.utils import get_password_hash
 
 
 class User(Base, PkModel, CRUDMixin):

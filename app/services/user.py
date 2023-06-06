@@ -1,7 +1,7 @@
 from sqlalchemy.orm.session import Session
 
-from api.common.crud import BaseCRUD
-import api.models.user as user_models
+from src.common.crud import BaseCRUD
+import src.models.user as user_models
 
 
 class UserCRUD(BaseCRUD):

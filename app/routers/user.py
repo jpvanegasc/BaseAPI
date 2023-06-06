@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 
-from api.common import db_session, object_response, MessageException
-from api.common.utils import message_response
-import api.controllers as controllers
-import api.schemas.user as user_schemas
+from src.common import db_session, object_response, MessageException
+from src.common.utils import message_response
+import src.controllers as controllers
+import src.schemas.user as user_schemas
 
 router = APIRouter(prefix="/api/users", tags=["Users"])
 

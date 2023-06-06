@@ -4,9 +4,9 @@ from logging.config import dictConfig
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from api.common import MessageException
-from api.common.settings import LogConfig
-from api.routers.user import router as user_router
+from src.common import MessageException
+from src.common.settings import LogConfig
+from src.routers.user import router as user_router
 
 dictConfig(LogConfig().dict())
 logger = logging.getLogger("logger")

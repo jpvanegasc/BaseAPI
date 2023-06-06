@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from api.schemas import optional
+from src.schemas import optional
 
 
 class UserBase(BaseModel):
