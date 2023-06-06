@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.dialects.postgresql import UUID
 
-from src.common import settings
+from app.settings import settings
 
 logger = logging.getLogger("logger")
 

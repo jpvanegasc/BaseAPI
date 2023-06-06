@@ -4,16 +4,17 @@ from logging.config import dictConfig
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from src.common import MessageException
-from src.common.settings import LogConfig
-from src.routers.user import router as user_router
+from app.exceptions import MessageException
+from app.routers import routers
+from app.settings import LogConfig
 
 dictConfig(LogConfig().dict())
 logger = logging.getLogger("logger")
 
 
 def include_routers(app):
-    app.include_router(user_router)
+    for router in routers:
+        app.include_router(router)
 
 
 def start_app():

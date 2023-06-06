@@ -1,3 +1,3 @@
-import api.controllers.user as u
+import app.services.user as u
 
 user = u.UserCRUD()

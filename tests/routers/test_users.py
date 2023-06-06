@@ -4,9 +4,9 @@ from copy import deepcopy
 
 from tests.routers.base import RouteTest
 from tests.utils import assert_code, assert_data, assert_message
-from src.models.user import User
-from src.controllers import user as user_crud
-from src.schemas.user import UserBase, UserCreate
+from app.models.user import User
+from app.services import user as user_crud
+from app.schemas.user import UserBase, UserCreate
 
 
 class TestUserRouters(RouteTest):

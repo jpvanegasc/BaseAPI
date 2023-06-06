@@ -6,8 +6,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from src.main import start_app
-from src.common.database import db_session, Base
+from app.main import start_app
+from app.database import db_session, Base
 
 engine = create_engine(os.environ.get("TEST_DATABASE_URL"))
 SessionTesting = sessionmaker(autocommit=False, autoflush=False, bind=engine)

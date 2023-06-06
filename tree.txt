@@ -3,16 +3,9 @@
 ├── Makefile
 ├── README.md
 ├── alembic.ini
-├── docker-compose.yml
-├── migrations
-│   ├── README
-│   ├── env.py
-│   ├── script.py.mako
-│   └── versions
-│       └── 1611874887a9_base_migration.py
-├── requirements.txt
-├── src
+├── app
 │   ├── database.py
+│   ├── exceptions.py
 │   ├── main.py
 │   ├── models
 │   │   ├── __init__.py
@@ -29,6 +22,17 @@
 │   │   └── user.py
 │   ├── settings.py
 │   └── utils.py
+├── docker-compose.yml
+├── migrations
+│   ├── README
+│   ├── env.py
+│   ├── script.py.mako
+│   └── versions
+│       └── 1611874887a9_base_migration.py
+├── requirements.txt
+├── src
+│   └── routers
+│       └── __init__.py
 ├── tests
 │   ├── __init__.py
 │   ├── conftest.py
@@ -43,4 +47,4 @@
 │   └── utils.py
 └── tree.txt
 
-17 directories, 44 files
+20 directories, 34 files
