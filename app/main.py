@@ -4,7 +4,6 @@ from logging.config import dictConfig
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.exceptions import MessageException
 from app.routers import routers
 from app.settings import LogConfig
 
@@ -19,10 +18,6 @@ def include_routers(app):
 
 def start_app():
     app = FastAPI()
-
-    @app.exception_handler(MessageException)
-    async def message_exception_handler(request: Request, exc: MessageException):
-        return JSONResponse(status_code=exc.status_code, content=exc.to_dict())
 
     include_routers(app)
 

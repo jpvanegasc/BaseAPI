@@ -1,45 +1,8 @@
 from typing import Any
-from pydantic import BaseModel
 from passlib.context import CryptContext
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
 
-BASE_RESPONSE = {"data": None, "message": ""}
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def object_response(
-    item: Any,
-    status_code: int = 200,
-    message: str = "Success",
-    schema: BaseModel = None,
-    exclude_none: bool = False,
-):
-    response = BASE_RESPONSE.copy()
-
-    if schema:
-        if isinstance(item, list):
-            item = [schema.from_orm(i).dict(exclude_none=exclude_none) for i in item]
-        else:
-            item = schema.from_orm(item).dict(exclude_none=exclude_none)
-
-    response["data"] = item
-    response["message"] = message
-
-    response = jsonable_encoder(response)
-
-    return JSONResponse(response, status_code=status_code)
-
-
-def message_response(message: str, status_code: int = 200):
-    response = BASE_RESPONSE.copy()
-
-    response["message"] = message
-
-    return JSONResponse(response, status_code=status_code)
-
-
 
 
 
