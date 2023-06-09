@@ -1,8 +1,7 @@
 import logging
 from logging.config import dictConfig
 
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 
 from app.routers import routers
 from app.settings import LogConfig
