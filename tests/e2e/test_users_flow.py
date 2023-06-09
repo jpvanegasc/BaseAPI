@@ -1,9 +1,10 @@
 from uuid import uuid4
 
 from tests.utils import mock_load, assert_code, assert_data, assert_message
+from tests.client import client
 
 
-def test_successful_user_flow(client):
+def test_successful_user_flow():
     """
     Test for user's CRUD
     """

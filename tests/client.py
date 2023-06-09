@@ -1,7 +1,6 @@
 import os
-import json
 
-import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -13,15 +12,13 @@ engine = create_engine(os.environ.get("TEST_DATABASE_URL"))
 SessionTesting = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-@pytest.fixture
-def mock_app():
+def mock_app()->FastAPI:
     Base.metadata.create_all(engine)
     app = start_app()
     yield app
     Base.metadata.drop_all(engine)
 
 
-@pytest.fixture
 def mock_db_session():
     connection = engine.connect()
     transaction = connection.begin()
@@ -32,15 +29,14 @@ def mock_db_session():
     connection.close()
 
 
-@pytest.fixture
-def client(mock_app, mock_db_session):
-    def test_db_session():
-        try:
-            yield mock_db_session
-        finally:
-            pass
+def test_db_session():
+    try:
+        yield mock_db_session
+    finally:
+        pass
 
-    mock_app.dependency_overrides[db_session] = test_db_session
 
-    with TestClient(mock_app) as client:
-        yield client
+app = mock_app()
+app.dependency_overrides[db_session] = test_db_session
+
+client = TestClient(app)
