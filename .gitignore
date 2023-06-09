@@ -8,8 +8,9 @@
 serverless.yml
 .serverless/
 
-# IDE
+# IDE & venv
 .vscode/
+env/
 
 # Tests
 .coverage

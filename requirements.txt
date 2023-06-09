@@ -38,11 +38,11 @@ pytest-mock==3.6.1
 python-dotenv==0.19.2
 requests==2.26.0
 sniffio==1.2.0
-SQLAlchemy==1.4.29
+SQLAlchemy==2.0.0
 starlette==0.16.0
 toml==0.10.2
 tomli==2.0.1
-typing_extensions==4.0.1
+typing_extensions==4.2.0
 urllib3==1.26.7
 uvicorn==0.16.0
 zipp==3.7.0
