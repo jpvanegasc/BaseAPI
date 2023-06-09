@@ -15,20 +15,6 @@ services:
     networks:
       - network
 
-  test_db:
-    container_name: ${PROJECT_NAME}_test_db
-    image: postgres:12
-    command: -p 5433
-    environment:
-      - POSTGRES_DB=${PROJECT_NAME}_test
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    ports:
-      - '5433:5433'
-    networks:
-      - network
-
   backend:
     image: ${PROJECT_NAME}_backend
     container_name: ${PROJECT_NAME}_backend
@@ -39,7 +25,6 @@ services:
       - '8000:8000'
     depends_on:
       - db
-      - test_db
     networks:
       - network
 
