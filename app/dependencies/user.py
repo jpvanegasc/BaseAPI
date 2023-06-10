@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.database import db_session
 from app.models import User
 from app.services import user as user_service
-from app.exceptions import UserNotFound, DuplicateUser
+from app.exceptions import UserNotFound
 
 
 def valid_user(external_id: UUID, db: Session = Depends(db_session)) -> Optional[User]:
@@ -15,5 +15,3 @@ def valid_user(external_id: UUID, db: Session = Depends(db_session)) -> Optional
         return user
 
     raise UserNotFound()
-
-
