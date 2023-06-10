@@ -1,7 +1,10 @@
 import logging
 
+from typing import List
+
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import sessionmaker, Session, declarative_base
+from sqlalchemy.orm import sessionmaker, Session, declarative_base, Query
+from sqlalchemy.exc import IntegrityError
 
 from app.settings import settings
 
@@ -29,5 +32,19 @@ def db_session() -> Session:
         yield db
     except Exception:
         logger.critical("DB is down", exc_info=True)
+        raise
     finally:
         db.close()
+
+
+def paginate(query: Query, page_number: int, per_page: int) -> List:
+    offset = (page_number - 1) * per_page
+    return query.limit(per_page).offset(offset).all()
+
+
+def commit_if_unique(db: Session, exception=Exception, msg="duplicate resource"):
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise exception(msg)
