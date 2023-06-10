@@ -1,15 +1,20 @@
-from sqlalchemy import Column, String, DateTime
+from uuid import uuid4
+
+from sqlalchemy import Column, String, DateTime, Integer, Uuid
 from sqlalchemy.sql import func
 
-from app.database import Base, PkModel, CRUDMixin
+from app.database import Base
 from app.utils import get_password_hash
 
 
-class User(Base, PkModel, CRUDMixin):
+class User(Base):
     __tablename__ = "user"
 
-    username = Column(String(), unique=True)
-    password = Column(String())
+    id = Column(Integer(), primary_key=True, index=True)
+    external_id = Column(Uuid, unique=True, default=lambda: str(uuid4()))
+
+    username = Column(String, unique=True, index=True)
+    password = Column(String)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
