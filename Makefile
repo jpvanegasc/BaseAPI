@@ -1,13 +1,10 @@
 PROJECT_NAME = baseapi
 
 build-images:
-	docker build -f Dockerfile.local -t ${PROJECT_NAME}_backend .
+	docker build -t ${PROJECT_NAME}_backend .
 
 server: build-images
 	docker-compose -f docker-compose.yml up -d
-	sleep 1
-	docker exec ${PROJECT_NAME}_backend alembic upgrade head
-	docker exec ${PROJECT_NAME}_backend uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 server-stop:
 	docker-compose -f docker-compose.local.yml down

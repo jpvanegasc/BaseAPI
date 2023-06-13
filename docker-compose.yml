@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
 
@@ -16,9 +16,8 @@ services:
       - network
 
   backend:
-    image: ${PROJECT_NAME}_backend
+    build: .
     container_name: ${PROJECT_NAME}_backend
-    command: tail -F anything
     volumes:
       - .:/app
     ports:
