@@ -27,6 +27,7 @@ Base = declarative_base(metadata=metadata)
 
 
 def db_session() -> Session:
+    """Database session generator"""
     try:
         db: Session = SessionLocal()
         yield db
@@ -38,11 +39,32 @@ def db_session() -> Session:
 
 
 def paginate(query: Query, page_number: int, per_page: int) -> List:
+    """Paginate a query.
+
+    This function provides a middleware for paginating a query in a more human readable
+    way. Please note that this function will execute the query!
+
+    Parameters
+    ----------
+    query : Query
+    page_number : int
+    per_page : int
+
+    Returns
+    -------
+    List :
+        Paginated query result
+    """
     offset = (page_number - 1) * per_page
     return query.limit(per_page).offset(offset).all()
 
 
 def commit_if_unique(db: Session, exception=Exception, msg="duplicate resource"):
+    """Commit to DB preserving uniqueness.
+
+    Wrapper to avoid boilerplate-ish code. It avoids an extra query to the DB, letting
+    it handle the uniqueness constraint instead of handling it in python.
+    """
     try:
         db.commit()
     except IntegrityError:

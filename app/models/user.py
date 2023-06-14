@@ -8,6 +8,23 @@ from app.utils import get_password_hash
 
 
 class User(Base):
+    """User
+
+    Attributes:
+        id : int
+            Primary key, used internally.
+        external_id : uuid.UUID
+            External identifier for the user. This is the value exposed to the public.
+        username : str
+            Username of the user.
+        password : str
+            User's password. Hashed at creation time.
+        created_at : datetime.datetime)
+            The timestamp when the user was created.
+        updated_at : datetime.datetime)
+            The timestamp when the user was last updated.
+    """
+
     __tablename__ = "user"
 
     id = Column(Integer(), primary_key=True, index=True)

@@ -5,6 +5,8 @@ from pydantic import BaseModel
 
 
 class PagedResponse(BaseModel):
+    """Common paged response model"""
+
     items: List[BaseModel]
     total: int
 
