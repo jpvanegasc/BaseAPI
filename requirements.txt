@@ -6,6 +6,7 @@ black==22.6.0
 certifi==2021.10.8
 charset-normalizer==2.0.9
 click==8.0.3
+colorama==0.4.6
 coverage==6.4.2
 environs==9.3.5
 fastapi==0.70.1
@@ -16,6 +17,7 @@ idna==3.3
 importlib-metadata==4.10.0
 importlib-resources==5.4.0
 iniconfig==1.1.1
+interrogate==1.5.0
 Mako==1.1.6
 MarkupSafe==2.0.1
 marshmallow==3.14.1
@@ -40,6 +42,7 @@ requests==2.26.0
 sniffio==1.2.0
 SQLAlchemy==2.0.0
 starlette==0.16.0
+tabulate==0.9.0
 toml==0.10.2
 tomli==2.0.1
 typing_extensions==4.2.0

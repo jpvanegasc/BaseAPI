@@ -25,3 +25,4 @@ lint:
 test:
 	docker exec ${PROJECT_NAME}_backend coverage run -m pytest -c tests/pytest.ini tests/
 	docker exec ${PROJECT_NAME}_backend coverage report
+	docker exec ${PROJECT_NAME}_backend interrogate .
