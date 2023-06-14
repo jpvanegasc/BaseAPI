@@ -1,5 +1,0 @@
-*.template.*
-.env.*
-startproject.py
-local/
-tests/
