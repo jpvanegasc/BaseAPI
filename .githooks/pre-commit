@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# ensure stdin is open, as per
+# https://github.com/docker/compose/issues/6714
+# else the output of the fmt / lint calls will be suppressed
+exec < /dev/tty
+
+echo "-- Running pre-commit hooks --\n"
+
+staged=$(git diff --staged --name-only --diff-filter=ACM | grep .py | tr '\n' ' ')
+if [ -z "$staged" ]; then
+    echo "No python files staged for commit - skipping lint"
+    echo "\n-- Finished pre-commit hooks --"
+    exit 0
+fi
+
+if make lint LINT_FILES="$staged" ; then
+  echo "\n-- Finished pre-commit hooks --"
+  exit 0
+else
+  echo "\n-- Linter failed --"
+  exit 1
+fi
