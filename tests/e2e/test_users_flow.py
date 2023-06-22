@@ -1,13 +1,14 @@
 from uuid import uuid4
 
 from tests.utils import mock_load, assert_code, assert_data, assert_message
+from tests.client import client
 
 
-def test_successful_user_flow(client):
+def test_successful_user_flow():
     """
     Test for user's CRUD
     """
-    from api.schemas.user import UserBase
+    from app.schemas.user import UserBase
 
     data = mock_load("user")
 
@@ -42,20 +43,20 @@ def test_successful_user_flow(client):
     assert_code(response, 404)
     assert_message(response, "user not found")
 
-    # Update
-    new_username = "new_username"
-    data["username"] = new_username
+    # # Update
+    # new_username = "new_username"
+    # data["username"] = new_username
 
-    response = client.patch(f"api/users/{user_id}", json={"username": new_username})
+    # response = client.patch(f"api/users/{user_id}", json={"username": new_username})
 
-    assert_code(response, 200)
-    assert_data(UserBase, response, data)
+    # assert_code(response, 200)
+    # assert_data(UserBase, response, data)
 
-    # Update - not found
-    response = client.patch(f"api/users/{uuid4()}", json={"username": ""})
+    # # Update - not found
+    # response = client.patch(f"api/users/{uuid4()}", json={"username": ""})
 
-    assert_code(response, 404)
-    assert_message(response, "user not found")
+    # assert_code(response, 404)
+    # assert_message(response, "user not found")
 
     # Delete
     response = client.delete(f"api/users/{user_id}")

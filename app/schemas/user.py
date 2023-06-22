@@ -1,6 +1,9 @@
+from uuid import UUID
+from typing import List
+
 from pydantic import BaseModel
 
-from api.schemas import optional
+from app.schemas.common import optional, PagedResponse
 
 
 class UserBase(BaseModel):
@@ -12,10 +15,14 @@ class UserCreate(UserBase):
 
 
 class UserRead(UserBase):
-    id: str
+    external_id: UUID
 
     class Config:
         orm_mode = True
+
+
+class UserPagedResponse(PagedResponse):
+    items: List[UserRead]
 
 
 @optional

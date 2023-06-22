@@ -1,0 +1,8 @@
+[tool.interrogate]
+exclude = ["env", "tests", "migrations"]
+ignore-module = true
+ignore-init-module = true
+ignore-init-method = true
+ignore-nested-functions = true
+ignore-nested-classes = true
+fail-under = 50

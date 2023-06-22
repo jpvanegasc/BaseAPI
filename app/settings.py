@@ -6,6 +6,8 @@ env.read_env()
 
 
 class Settings(BaseSettings):
+    """App level settings"""
+
     DATABASE_URL: str = env.str("DATABASE_URL")
     LOG_LEVEL: str = env.str("LOG_LEVEL")
 
@@ -14,6 +16,8 @@ settings = Settings()
 
 
 class LogConfig(BaseModel):
+    """Logger formatting configuration"""
+
     LOGGER_NAME: str = "logger"
     LOG_FORMAT: str = "%(levelprefix)s |%(asctime)s| %(message)s"
     LOG_LEVEL: str = settings.LOG_LEVEL
