@@ -1,0 +1,27 @@
+[project]
+name = "plm-api"
+authors = [{name = "PLM", email = ""}]
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110.1",
+    "uvicorn>=0.29.0",
+    "SQLAlchemy>=2.0.29",
+    "psycopg2-binary==2.9.9",
+    "alembic>=1.13.1",
+    "pydantic-settings==2.2.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "ruff",
+    "mypy",
+]
+
+[tool.mypy]
+exclude = [
+    'env',
+    'dev-env',
+]
+ignore_missing_imports = true

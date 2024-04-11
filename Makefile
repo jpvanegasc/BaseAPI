@@ -1,41 +1,32 @@
-PROJECT_NAME = baseapi
-LINT_FILES = .
+# .SILENT: 
+.PHONY:
 
-set-up: build-images
-	git config core.hooksPath .githooks
+run: build
+	docker compose up
 
-build-images:
-	docker build -t ${PROJECT_NAME}_backend .
+build:
+	docker compose build
 
-server: build-images
-	docker-compose -f docker-compose.yml up -d
+format:
+	docker compose exec backend black .
 
-server-stop:
-	docker-compose -f docker-compose.local.yml down
+lint: format
+	docker compose exec backend ruff check --fix .
 
-logs:
-	docker logs ${PROJECT_NAME}_backend
-
-migrate:
-	docker exec ${PROJECT_NAME}_backend alembic upgrade head
-
-container-bash:
-	docker exec -it ${PROJECT_NAME}_backend /bin/bash
-
-lint:
-	black ${LINT_FILES}
-	flake8 ${LINT_FILES}
-
-docker-lint:
-	docker run ${PROJECT_NAME}_backend black ${LINT_FILES}
-	docker run ${PROJECT_NAME}_backend flake8 ${LINT_FILES}
+type-check:
+	docker compose exec backend mypy .
 
 test:
-	coverage run -m pytest -c tests/pytest.ini tests/
-	coverage report
-	interrogate .
+	docker compose run backend docker/dockertest.sh
 
-docker-test:
-	docker exec ${PROJECT_NAME}_backend coverage run -m pytest -c tests/pytest.ini tests/
-	docker exec ${PROJECT_NAME}_backend coverage report
-	docker exec ${PROJECT_NAME}_backend interrogate .
+clean:
+	rm -rf .ruff_cache
+	rm -rf **/.ruff_cache
+	rm -rf .mypy_cache
+	rm -rf __pycache__
+	rm -rf **/__pycache__
+	rm -rf .pytest_cache
+
+.env:
+	@echo "Creating .env file... modify it to your needs"
+	cp .env.example .env

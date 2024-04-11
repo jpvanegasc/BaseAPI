@@ -1,8 +1,10 @@
-[tool.interrogate]
-exclude = ["env", "tests", "migrations"]
-ignore-module = true
-ignore-init-module = true
-ignore-init-method = true
-ignore-nested-functions = true
-ignore-nested-classes = true
-fail-under = 50
+[project]
+name = "plm-api"
+requires-python = ">=3.11"
+
+[tool.mypy]
+exclude = [
+    'env',
+    'dev-env',
+]
+ignore_missing_imports = true
