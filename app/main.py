@@ -1,26 +1,23 @@
-import logging
-from logging.config import dictConfig
-
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import routers
-from app.settings import LogConfig
-
-dictConfig(LogConfig().dict())
-logger = logging.getLogger("logger")
+from app.config import settings, FastAPIAppConfig
+from app.api_versioning import load_versioned_routers
 
 
-def include_routers(app):
-    for router in routers:
-        app.include_router(router)
+app_config = FastAPIAppConfig(title=settings.SERVICE_NAME)
+app = FastAPI(**app_config.to_dict())
+
+load_versioned_routers(app=app, app_config=app_config)
 
 
-def start_app():
-    app = FastAPI()
-
-    include_routers(app)
-
-    return app
-
-
-app = start_app()
+origins = [
+    "*",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

@@ -1,41 +1,47 @@
-PROJECT_NAME = baseapi
-LINT_FILES = .
+DUMP_PATH ?= ~/db_dumps/plm_development_clean_snapshots.pgdump
+TEST_PATH := test/
 
-set-up: build-images
-	git config core.hooksPath .githooks
+.SILENT: 
 
-build-images:
-	docker build -t ${PROJECT_NAME}_backend .
+.env:
+	echo "Creating .env file... modify it to your needs"
+	cp .env.example .env
 
-server: build-images
-	docker-compose -f docker-compose.yml up -d
+.PHONY:
 
-server-stop:
-	docker-compose -f docker-compose.local.yml down
+run:
+	docker compose up
 
-logs:
-	docker logs ${PROJECT_NAME}_backend
+build: .env
+	docker compose build
 
-migrate:
-	docker exec ${PROJECT_NAME}_backend alembic upgrade head
+format:
+	docker compose exec api black .
 
-container-bash:
-	docker exec -it ${PROJECT_NAME}_backend /bin/bash
-
-lint:
-	black ${LINT_FILES}
-	flake8 ${LINT_FILES}
-
-docker-lint:
-	docker run ${PROJECT_NAME}_backend black ${LINT_FILES}
-	docker run ${PROJECT_NAME}_backend flake8 ${LINT_FILES}
+lint: format
+	docker compose exec api ruff check --fix .
+	docker compose exec api mypy .
 
 test:
-	coverage run -m pytest -c tests/pytest.ini tests/
-	coverage report
-	interrogate .
+	docker compose run api docker/dockertest.sh
 
-docker-test:
-	docker exec ${PROJECT_NAME}_backend coverage run -m pytest -c tests/pytest.ini tests/
-	docker exec ${PROJECT_NAME}_backend coverage report
-	docker exec ${PROJECT_NAME}_backend interrogate .
+clean:
+	rm -rf .ruff_cache
+	rm -rf **/.ruff_cache
+	rm -rf .mypy_cache
+	rm -rf __pycache__
+	rm -rf **/__pycache__
+	rm -rf .pytest_cache
+<<<<<<< Updated upstream
+
+.env:
+	@echo "Creating .env file... modify it to your needs"
+	cp .env.example .env
+=======
+	rm -rf .coverage
+
+load_db :
+	docker compose exec database dropdb --if-exists -U postgres plm_development
+	docker compose exec database createdb -U postgres plm_development
+	docker compose exec -T database pg_restore --verbose --clean --no-acl --no-owner -U postgres -d plm_development < $(DUMP_PATH)
+>>>>>>> Stashed changes

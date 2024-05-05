@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+      - ENV=dev
+    volumes:
+      - .:/api
+    depends_on:
+      - database
+    ports:
+      - 8000:8000
+    environment:
+      - ENV=dev
+
+  database:
+    image: postgres:11.19-alpine3.17
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=plm_development
+      - POSTGRES_PORT=5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
+    driver: local
