@@ -32,7 +32,6 @@ clean:
 	rm -rf __pycache__
 	rm -rf **/__pycache__
 	rm -rf .pytest_cache
-<<<<<<< Updated upstream
 
 .env:
 	@echo "Creating .env file... modify it to your needs"
@@ -44,4 +43,7 @@ load_db :
 	docker compose exec database dropdb --if-exists -U postgres plm_development
 	docker compose exec database createdb -U postgres plm_development
 	docker compose exec -T database pg_restore --verbose --clean --no-acl --no-owner -U postgres -d plm_development < $(DUMP_PATH)
->>>>>>> Stashed changes
+
+.env:
+	@echo "Creating .env file... modify it to your needs"
+	cp .env.example .env
