@@ -1,3 +1,6 @@
+# 🗑️ Archived
+__This template is no longer being used by me.__ I'm working in a similar project in the [architecture-lab repo](https://github.com/jpvanegasc/architecture-lab) (this template would fall under the `monolith` architecture).
+
 # API template
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
